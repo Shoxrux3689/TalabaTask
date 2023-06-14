@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TalabaTask.Context;
+using TalabaTask.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("TalabaDb"));
 });
+builder.Services.AddJwt(builder.Configuration);
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
 ﻿namespace TalabaTask.Models
 {
-	public class CreateStudentModel
+	public class CreateTeacherModel
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
