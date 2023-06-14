@@ -23,6 +23,18 @@ public static class ServiceCollectionExtensions
 				ValidateLifetime = true,
 				ClockSkew = TimeSpan.Zero
 			};
+
+			options.Events = new JwtBearerEvents()
+			{
+				OnMessageReceived = async context =>
+				{
+					if (string.IsNullOrEmpty(context.Token))
+					{
+						var accessToken = context.Request.Cookies["token"];
+						context.Token = accessToken;
+					}
+				}
+			};
 		});
 	}
 }

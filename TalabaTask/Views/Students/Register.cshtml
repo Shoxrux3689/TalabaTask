@@ -1,0 +1,32 @@
+﻿@model CreateStudentModel
+
+<h1>Register</h1>
+
+<form class="row g-3" style="width: 400px" asp-controller="Students" asp-action="Register" method="post">
+    <div>
+        <input name="FirstName" class="form-control" asp-for="FirstName" type="text" placeholder="FirstName" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+    <div>
+        <input name="LastName" class="form-control" asp-for="LastName" type="text" placeholder="LastName" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+    <div>
+        <input name="Password" class="form-control" asp-for="Password" type="text" placeholder="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <input name="PhoneNumber" class="form-control" asp-for="PhoneNumber" type="text" placeholder="PhoneNumber" />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+    <div>
+        <input name="Email" class="form-control" asp-for="Email" type="text" placeholder="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <input name="BirthDate" class="form-control" asp-for="BirthDate" type="date" placeholder="BirthDate" />
+        <span asp-validation-for="BirthDate"></span>
+    </div>
+    <button class="form-control" type="submit">Sign Up</button>
+    <a class="link-info" asp-controller="Users" asp-action="SignIn">Sign In</a>
+</form>

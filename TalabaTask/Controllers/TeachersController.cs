@@ -7,10 +7,10 @@ using TalabaTask.Models;
 
 namespace TalabaTask.Controllers;
 
-public class TeacherController : Controller
+public class TeachersController : Controller
 {
 	private readonly AppDbContext _db;
-	public TeacherController(AppDbContext appDbContext) 
+	public TeachersController(AppDbContext appDbContext) 
 	{
 		_db = appDbContext;
 	}
