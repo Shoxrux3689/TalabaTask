@@ -11,7 +11,7 @@
             <th scope="col">FirstName</th>
             <th scope="col">LastName</th>
             <th scope="col">PhoneNumber</th>
-            <th scope="col">97 dan baland oquvchilar soni</th>
+            <th scope="col">GetScienceTop10Student</th>
         </tr>
     </thead>
     <tbody>
@@ -19,13 +19,13 @@
         {
             var teacher = Model[i];
 
-                <tr>
-                    <th scope="row">@(i + 1)</th>
-                    <td>@teacher.FirstName</td>
-                    <td>@teacher.LastName</td>
-                    <td>@teacher.PhoneNumber</td>
-                    <td>Bu yerda nechta 97 dan baland oquvchisi bolganligi haqida malumot</td>
-                </tr>
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@teacher.FirstName</td>
+                <td>@teacher.LastName</td>
+                <td>@teacher.PhoneNumber</td>
+                <td><a asp-action="GetScienceTop10Student" asp-controller="Science" asp-route-teacherId="@teacher.Id">GetScienceTop10Student</a></td>
+            </tr>
         }
     </tbody>
 </table>

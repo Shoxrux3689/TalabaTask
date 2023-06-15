@@ -88,7 +88,10 @@ public class TeachersController : Controller
 		return View(teacher);
 	}
 
-
+	public async Task<IActionResult> GetTeachers()
+	{
+		return View(await _db.Teachers.ToListAsync());
+	}
 	public async Task<IActionResult> GetTeachersOver55()
 	{
         var teachers = await _db.Teachers

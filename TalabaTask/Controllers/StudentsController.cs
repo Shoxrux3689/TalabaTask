@@ -86,6 +86,11 @@ public class StudentsController : Controller
 		return View(student);
 	}
 
+	public async Task<IActionResult> GetStudents()
+	{
+		return View(await _db.Students.ToListAsync());
+	}
+
 	public async Task<IActionResult> GetStudentsUnder20()
 	{
 		var students = await _db.Students

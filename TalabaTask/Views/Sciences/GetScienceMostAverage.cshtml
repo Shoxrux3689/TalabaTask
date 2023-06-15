@@ -1,0 +1,36 @@
+﻿@using TalabaTask.Entities;
+@model Science
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">Grade @ViewBag.Average</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Gradiates?.Count; i++)
+        {
+            var student = Model.Gradiates[i].Student;
+
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                @{
+                    if (Model.Gradiates.Any(g => g.StudentId == student.Id))
+                    {
+                        <td>@Model.Gradiates.FirstOrDefault(g => g.StudentId == student.Id).Grade</td>
+                    }
+                    else
+                    {
+                        <td><a asp-action="Mark" asp-controller="Sciences" asp-route-studentId="@student.Id" asp-route-scienceId="@Model.Id">Mark</a></td>
+                    }
+                }
+
+            </tr>
+        }
+    </tbody>
+</table>

@@ -146,8 +146,14 @@ public class SciencesController : Controller
 		return RedirectToAction("GetSciences");
 	}
 
+	[Authorize]
 	public async Task<IActionResult> GetScienceStudentIsMostGrade(long studentId)
 	{
+		if (studentId < 0)
+		{
+			return View("Index");
+		}
+
 		var gradiate = await _db.Gradiates
 			.Where(g => g.StudentId == studentId)
 			.OrderByDescending(g => g.Grade).FirstAsync();
@@ -157,6 +163,7 @@ public class SciencesController : Controller
 		return View(science);
 	}
 
+	//malumot toldirilsa ishlidi countga togri kemi qovoti
 	public async Task<IActionResult> GetScienceTop10Student(long teacherId)
 	{
 		var sciences = await _db.Sciences.Include(s => s.Gradiates).ThenInclude(g => g.Student)
@@ -170,9 +177,12 @@ public class SciencesController : Controller
 	//shuni page qoldi
 	public async Task<IActionResult> GetScienceMostAverage()
 	{
-		var science = await _db.Sciences.Include(s => s.Gradiates)
+		var science = await _db.Sciences.Include(s => s.Gradiates).ThenInclude(g => g.Student)
 			.OrderByDescending(s => s.Gradiates!.Average(g => g.Grade))
 			.FirstAsync();
+
+		var average = science.Gradiates.Average(g => g.Grade);
+		ViewBag.Average = average;
 
 		return View(science);
 	}
