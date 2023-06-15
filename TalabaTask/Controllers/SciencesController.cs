@@ -152,14 +152,14 @@ public class SciencesController : Controller
 			.Where(g => g.StudentId == studentId)
 			.OrderByDescending(g => g.Grade).FirstAsync();
 
-		var science = await _db.Sciences.FirstOrDefaultAsync(s => s.Id == gradiate.ScienceId);
-		
+		var science = await _db.Sciences.Include(s => s.Gradiates).FirstOrDefaultAsync(s => s.Id == gradiate.ScienceId);
+		ViewBag.Gradiate = gradiate;
 		return View(science);
 	}
 
 	public async Task<IActionResult> GetScienceTop10Student(long teacherId)
 	{
-		var sciences = await _db.Sciences.Include(s => s.Gradiates)
+		var sciences = await _db.Sciences.Include(s => s.Gradiates).ThenInclude(g => g.Student)
 			.Where(s => s.TeacherId == teacherId).ToListAsync();
 
 		Science? science = sciences.Where(s => s.Gradiates?.Where(g => g.Grade > 80).Count() > 9).FirstOrDefault();
@@ -167,6 +167,7 @@ public class SciencesController : Controller
 		return View(science);
 	}
 
+	//shuni page qoldi
 	public async Task<IActionResult> GetScienceMostAverage()
 	{
 		var science = await _db.Sciences.Include(s => s.Gradiates)

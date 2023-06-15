@@ -1,0 +1,29 @@
+﻿@using TalabaTask.Entities;
+@model Student
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Science Name</th>
+            <th scope="col">TeacherId</th>
+            <th scope="col">Get</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Gradiates.Count; i++)
+        {
+            var gradiate = Model.Gradiates[i];
+
+                <tr>
+                    <th scope="row">@(i + 1)</th>
+                    <td>@gradiate.StudentId</td>
+                    <td>@gradiate.Student.FirstName</td>
+                    <td>@gradiate.Student.LastName</td>
+                    <td>@gradiate.Grade</td>
+                </tr>
+        }
+    </tbody>
+</table>
