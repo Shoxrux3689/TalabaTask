@@ -49,14 +49,16 @@ public class SciencesController : Controller
 		_db.Sciences.Add(science);
 		await _db.SaveChangesAsync();
 
-		return RedirectToAction();
+		return RedirectToAction("GetSciences");
 	}
 
 	public async Task<IActionResult> GetScience(long scienceId)
 	{
-		var science = await _db.Sciences.FirstOrDefaultAsync(s => s.Id == scienceId);
-		
-		return View(science);
+		var science = await _db.Sciences.Include(s => s.StudentSciences).ThenInclude(s => s.Student).FirstOrDefaultAsync(s => s.Id == scienceId);
+		var result = await _db.Sciences.Include(s => s.Gradiates).FirstOrDefaultAsync(s => s.Id == scienceId);
+		ViewBag.Gradiates = result.Gradiates;
+
+        return View(science);
 	}
 
 	[Authorize]
@@ -113,8 +115,11 @@ public class SciencesController : Controller
 	}
 
 	[HttpGet]
-	public IActionResult Mark() 
+	public IActionResult Mark(long scienceId, long studentId) 
 	{
+		ViewBag.ScienceId = scienceId;
+		ViewBag.StudentId = studentId;
+
 		return View();
 	}
 
@@ -138,7 +143,7 @@ public class SciencesController : Controller
 		_db.Gradiates.Add(gradiate);
 		await _db.SaveChangesAsync();
 
-		return RedirectToAction();
+		return RedirectToAction("GetSciences");
 	}
 
 	public async Task<IActionResult> GetScienceStudentIsMostGrade(long studentId)

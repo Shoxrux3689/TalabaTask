@@ -1,0 +1,34 @@
+﻿@using TalabaTask.Entities;
+@model List<Science>
+
+
+<h1>Barcha Fanlar</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Science Name</th>
+            <th scope="col">TeacherId</th>
+            <th scope="col">Get</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var student = Model[i];
+
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@student.Id</td>
+                <td>@student.Name</td>
+                <td>@student.TeacherId</td>
+                <td><a asp-action="GetScience" asp-controller="Sciences" asp-route-scienceId="@student.Id">GET</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
