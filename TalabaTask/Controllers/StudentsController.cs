@@ -85,4 +85,43 @@ public class StudentsController : Controller
 		
 		return View(student);
 	}
+
+	public async Task<IActionResult> GetStudentsUnder20()
+	{
+		var students = await _db.Students
+			.Where(s => s.BirthDate.Year - DateTime.Now.Year < 20)
+			.ToListAsync();
+
+		return View(students);
+	}
+
+	public async Task<IActionResult> GetStudentsAugustToSeptember()
+	{
+		var students = await _db.Students
+			.Where(s =>
+			(s.BirthDate.Month == 9 && s.BirthDate.Day < 19) ||
+			(s.BirthDate.Month == 8 && s.BirthDate.Day < 11))
+			.ToListAsync();
+
+		return View(students);
+	}
+
+	[HttpGet]
+	public IActionResult GetStudentsWithPhrase()
+	{
+		return View();
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> GetStudentsWithPhrase(string phrase)
+	{
+		phrase = phrase.ToUpper();
+
+		var students = await _db.Students
+			.Where(s => s.FirstName.ToUpper().StartsWith(phrase) 
+			|| s.LastName.ToUpper().StartsWith(phrase))
+			.ToListAsync();
+
+		return View();
+	}
 }

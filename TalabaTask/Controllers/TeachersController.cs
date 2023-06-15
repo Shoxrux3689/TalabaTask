@@ -52,4 +52,31 @@ public class TeachersController : Controller
 
 		return View(teacher);
 	}
+
+	public async Task<IActionResult> GetTeachersOver50()
+	{
+		var teachers = await _db.Teachers
+			.Where(t => t.BirthDate.Year - DateTime.Now.Year > 54)
+			.ToListAsync();
+
+		return View(teachers);
+	}
+
+	public async Task<IActionResult> GetTeachersAndStudentsBeeline()
+	{
+		var students = await _db.Students
+			.Where(s => s.PhoneNumber[5] == '9' 
+			&& (s.PhoneNumber[6] == '0' || s.PhoneNumber[6] == '1'))
+			.ToListAsync();
+		
+		var teachers = await _db.Teachers
+			.Where(s => s.PhoneNumber[5] == '9' 
+			&& (s.PhoneNumber[6] == '0' || s.PhoneNumber[6] == '1'))
+			.ToListAsync();
+
+		var tuple = new Tuple<List<Student>, List<Teacher>>(students, teachers);
+
+		return View(tuple);
+	}
+
 }

@@ -141,5 +141,26 @@ public class SciencesController : Controller
 		return RedirectToAction();
 	}
 
+	public async Task<IActionResult> GetScienceStudentIsMostGrade(long studentId)
+	{
+		var gradiates = await _db.Gradiates
+			.Where(g => g.StudentId == studentId)
+			.OrderByDescending(g => g.Grade).ToListAsync();
 
+		var gradiate = gradiates.First();
+
+		var science = await _db.Sciences.FirstOrDefaultAsync(s => s.Id == gradiate.ScienceId);
+		
+		return View(science);
+	}
+
+	public async Task<IActionResult> GetScienceTop10Student(long teacherId)
+	{
+		var sciences = await _db.Sciences.Include(s => s.Gradiates)
+			.Where(s => s.TeacherId == teacherId).ToListAsync();
+
+		Science? science = sciences.Where(s => s.Gradiates?.Where(g => g.Grade > 80).Count() > 9).FirstOrDefault();
+
+		return View(science);
+	}
 }
