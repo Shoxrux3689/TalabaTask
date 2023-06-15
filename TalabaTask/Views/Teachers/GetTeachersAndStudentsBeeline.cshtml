@@ -1,0 +1,43 @@
+﻿@using TalabaTask.Entities;
+@model Tuple<List<Student>, List<Teacher>>
+
+
+<h1>Beeline raqamlilar</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">PhoneNumber</th>
+            <th scope="col">BirthDate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Item1.Count; i++)
+        {
+            var student = Model.Item1[i];
+
+            <tr>
+                <th scope="row">@(i + 1).Student</th>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.PhoneNumber</td>
+                <td>@student.BirthDate.ToString("D")</td>
+            </tr>
+        }
+        @for (int i = 0; i < Model.Item2.Count; i++)
+        {
+            var teacher = Model.Item2[i];
+
+            <tr>
+                <th scope="row">@(i + 1).Teacher</th>
+                <td>@teacher.FirstName</td>
+                <td>@teacher.LastName</td>
+                <td>@teacher.PhoneNumber</td>
+                <td>@teacher.BirthDate.ToString("D")</td>
+            </tr>
+        }
+    </tbody>
+</table>
