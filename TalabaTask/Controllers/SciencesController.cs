@@ -163,4 +163,13 @@ public class SciencesController : Controller
 
 		return View(science);
 	}
+
+	public async Task<IActionResult> GetScienceMostAverage()
+	{
+		var science = await _db.Sciences.Include(s => s.Gradiates)
+			.OrderByDescending(s => s.Gradiates!.Average(g => g.Grade))
+			.FirstAsync();
+
+		return View(science);
+	}
 }

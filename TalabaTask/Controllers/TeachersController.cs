@@ -79,4 +79,14 @@ public class TeachersController : Controller
 		return View(tuple);
 	}
 
+	public async Task<IActionResult> GetTeachersOver97Students()
+	{
+		var teachers = _db.Teachers
+			.Include(t => t.Sciences)
+			.ThenInclude(s => s.Gradiates)
+			.Where(t => t.Sciences.Any(s => s.Gradiates.Any(g => g.Grade > 97)))
+			.ToListAsync();
+
+		return View(teachers);
+	}
 }
