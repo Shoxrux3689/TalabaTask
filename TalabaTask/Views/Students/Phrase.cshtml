@@ -1,6 +1,8 @@
 ﻿@using TalabaTask.Entities;
-@model List<Student>
 
+@{
+    List<Student> Model = ViewBag.Models;
+}
 
 <h1>20 yoshdan kichik talabalar</h1>
 
@@ -29,5 +31,4 @@
         }
     </tbody>
 </table>
-
 

@@ -101,8 +101,8 @@ public class StudentsController : Controller
 	{
 		var students = await _db.Students
 			.Where(s =>
-			(s.BirthDate.Month == 9 && s.BirthDate.Day < 19) ||
-			(s.BirthDate.Month == 8 && s.BirthDate.Day < 11))
+			(s.BirthDate.Month == 9 && s.BirthDate.Day < 18) ||
+			(s.BirthDate.Month == 8 && s.BirthDate.Day > 11))
 			.ToListAsync();
 
 		return View(students);
@@ -115,15 +115,21 @@ public class StudentsController : Controller
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> GetStudentsWithPhrase(string phrase)
+	public async Task<IActionResult> Phrase(string phrase)
 	{
+		if (string.IsNullOrEmpty(phrase))
+		{
+			return View();
+		}
 		phrase = phrase.ToUpper();
 
 		var students = await _db.Students
-			.Where(s => s.FirstName.ToUpper().StartsWith(phrase) 
-			|| s.LastName.ToUpper().StartsWith(phrase))
+			.Where(s => s.FirstName.ToUpper().Contains(phrase) 
+			|| s.LastName.ToUpper().Contains(phrase))
 			.ToListAsync();
 
-		return View();
+		ViewBag.Models = students;
+
+		return View(students);
 	}
 }
