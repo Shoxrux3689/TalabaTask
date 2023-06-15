@@ -89,7 +89,9 @@ public class StudentsController : Controller
 	public async Task<IActionResult> GetStudentsUnder20()
 	{
 		var students = await _db.Students
-			.Where(s => s.BirthDate.Year - DateTime.Now.Year < 20)
+			.Where(s => (DateTime.Now.Year - s.BirthDate.Year < 20) ||
+            (DateTime.Now.Year - s.BirthDate.Year < 21 && DateTime.Now.Month - s.BirthDate.Month > 0) ||
+			(DateTime.Now.Year - s.BirthDate.Year < 21 && DateTime.Now.Month - s.BirthDate.Month >= 0 && DateTime.Now.Day - s.BirthDate.Day > 0))
 			.ToListAsync();
 
 		return View(students);

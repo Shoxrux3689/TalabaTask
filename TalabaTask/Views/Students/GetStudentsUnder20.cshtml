@@ -1,0 +1,33 @@
+﻿@using TalabaTask.Entities;
+@model List<Student>
+
+
+<h1>20 yoshdan kichik talabalar</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">PhoneNumber</th>
+            <th scope="col">BirthDate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var student = Model[i];
+
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.PhoneNumber</td>
+                <td>@student.BirthDate.ToString("d")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

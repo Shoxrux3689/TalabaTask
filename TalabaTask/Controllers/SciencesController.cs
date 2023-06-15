@@ -143,11 +143,9 @@ public class SciencesController : Controller
 
 	public async Task<IActionResult> GetScienceStudentIsMostGrade(long studentId)
 	{
-		var gradiates = await _db.Gradiates
+		var gradiate = await _db.Gradiates
 			.Where(g => g.StudentId == studentId)
-			.OrderByDescending(g => g.Grade).ToListAsync();
-
-		var gradiate = gradiates.First();
+			.OrderByDescending(g => g.Grade).FirstAsync();
 
 		var science = await _db.Sciences.FirstOrDefaultAsync(s => s.Id == gradiate.ScienceId);
 		

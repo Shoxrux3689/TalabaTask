@@ -1,21 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TalabaTask.Context;
 using TalabaTask.Entities;
 using TalabaTask.Migrations;
 using TalabaTask.Models;
+using TalabaTask.Providers;
+using TalabaTask.Services;
 
 namespace TalabaTask.Controllers;
 
 public class TeachersController : Controller
 {
 	private readonly AppDbContext _db;
-	public TeachersController(AppDbContext appDbContext) 
+	private readonly JwtServiceTeacher _jwtService;
+	private readonly long _userId; 
+	public TeachersController(AppDbContext appDbContext, 
+		JwtServiceTeacher jwtService,
+		UserProvider userProvider) 
 	{
 		_db = appDbContext;
+		_jwtService = jwtService;
+		_userId = userProvider.UserId;
 	}
-	public IActionResult Register(CreateTeacherModel createTeacher)
+
+	[HttpGet]
+	public IActionResult Register()
 	{
+		return View();
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Register(CreateTeacherModel createTeacher)
+	{
+		if (!ModelState.IsValid)
+		{
+			return View(createTeacher);
+		}
+
 		var teacher = new Teacher()
 		{
 			FirstName = createTeacher.FirstName,
@@ -26,9 +48,19 @@ public class TeachersController : Controller
 			BirthDate = createTeacher.BirthDate,
 		};
 
+		_db.Teachers.Add(teacher);
+		await _db.SaveChangesAsync();
+
+		return RedirectToAction("Login");
+	}
+
+	[HttpGet]
+	public IActionResult Login()
+	{
 		return View();
 	}
 
+	[HttpPost]
 	public async Task<IActionResult> Login(LoginTeacherModel loginTeacher)
 	{
 		if (!ModelState.IsValid)
@@ -37,21 +69,25 @@ public class TeachersController : Controller
 		}
 
 		var teacher = await _db.Teachers.FirstOrDefaultAsync(t => t.PhoneNumber == loginTeacher.PhoneNumber);
-
 		if (teacher == null || teacher.Password != loginTeacher.Password)
 		{
 			return View(loginTeacher);
 		}
 
+		var token = _jwtService.GenerateToken(teacher);
+		HttpContext.Response.Cookies.Append("token", $"{token}");
+
 		return RedirectToAction("Profile");
 	}
 
+	[Authorize]
 	public async Task<IActionResult> Profile()
 	{
-		var teacher = await _db.Teachers.FirstOrDefaultAsync();
+		var teacher = await _db.Teachers.FirstOrDefaultAsync(t => t.Id == _userId);
 
 		return View(teacher);
 	}
+
 
 	public async Task<IActionResult> GetTeachersOver50()
 	{
@@ -81,7 +117,7 @@ public class TeachersController : Controller
 
 	public async Task<IActionResult> GetTeachersOver97Students()
 	{
-		var teachers = _db.Teachers
+		var teachers = await _db.Teachers
 			.Include(t => t.Sciences)
 			.ThenInclude(s => s.Gradiates)
 			.Where(t => t.Sciences.Any(s => s.Gradiates.Any(g => g.Grade > 97)))
